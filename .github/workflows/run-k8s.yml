@@ -1,0 +1,21 @@
+name: Run K8s Evaluation
+
+on:
+  push:
+    paths:
+      - 'k8s_scenario.toml'
+
+jobs:
+  run-k8s:
+    runs-on: ubuntu-latest
+    if: github.event.repository.fork == true || github.ref != 'refs/heads/main'
+    permissions:
+      contents: write
+      packages: read
+
+    steps:
+      - name: Run assessment
+        uses: .github/workflows/run-scenario.yml
+        with:
+          scenario-file: 'k8s_scenario.toml'
+          benchmark-app: 'k8s'

@@ -1,0 +1,16 @@
+[green_agent]
+agentbeats_id = ""
+env = { API_KEY = "${GITHUB_SECRET_NAME}", LOG_LEVEL = "INFO" }
+
+[[participants]]
+role = "network_operator"
+agentbeats_id = ""
+env = {}
+
+[config]
+prompt_type = "zeroshot_base"
+num_queries = 1
+benchmark_path = "assessment_error_config.json"
+output_dir = "output"
+microservice_dir = "/home/ericwang/microservices-demo"
+max_iterations = 10
