@@ -202,11 +202,16 @@ extra_hosts:
     ])
 
     all_services = ["green-agent"] + participant_names
+    green_env = green.get("env", {})
+
+    if app == "k8s":
+        # For k8s app, set KUBECONFIG env var for green agent
+        green_env["KUBECONFIG"] = "/root/.kube/config"
 
     return COMPOSE_TEMPLATE.format(
         green_image=green["image"],
         green_port=DEFAULT_PORT,
-        green_env=format_env_vars(green.get("env", {})),
+        green_env=format_env_vars(green_env),
         green_depends=format_depends_on(participant_names),
         participant_services=participant_services,
         client_depends=format_depends_on(all_services),

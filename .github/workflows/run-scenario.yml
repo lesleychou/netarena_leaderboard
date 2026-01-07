@@ -48,7 +48,7 @@ jobs:
           cp "$HOME/.kube/config" "./kubeconfig/config"
           chmod +r ./kubeconfig/config
           # Modify the kubeconfig to use host.docker.internal
-          sed -i 's/127.0.0.1/host.docker.internal/g' ./kubeconfig/config
+          sed -i 's/0.0.0.0/host.docker.internal/g' ./kubeconfig/config
 
       - name: Install dependencies
         run: pip install tomli tomli-w pyyaml requests
