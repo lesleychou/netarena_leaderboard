@@ -1,0 +1,18 @@
+[green_agent]
+agentbeats_id = ""
+env = { LOG_LEVEL = "INFO" }
+
+[[participants]]
+agentbeats_id = ""
+name = "routing_operator"
+env = {}
+
+[config]
+prompt_type = "zeroshot_base"
+num_queries = 1
+benchmark_path = "assessment_error_config.json"
+regenerate_benchmark = true
+output_dir = "dump"
+max_iterations = 10
+num_switches = 2
+num_hosts_per_subnet = 1

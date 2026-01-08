@@ -1,0 +1,21 @@
+name: Run Route Evaluation
+
+on:
+  push:
+    paths:
+      - 'route_scenario.toml'
+
+jobs:
+  run-route:
+    runs-on: ubuntu-latest
+    if: github.event.repository.fork == true || github.ref != 'refs/heads/main'
+    permissions:
+      contents: write
+      packages: read
+
+    steps:
+      - name: Run assessment
+        uses: ./.github/workflows/run-scenario.yml
+        with:
+          scenario-file: 'route_scenario.toml'
+          benchmark-app: 'route'

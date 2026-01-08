@@ -1,9 +1,18 @@
 name: Run Scenario
 
 on:
-  push:
-    paths:
-      - 'scenario.toml'
+  workflow_call:
+    inputs:
+      scenario-file:
+        description: 'Path to the scenario TOML file'
+        required: false
+        default: 'scenario.toml'
+        type: string
+      benchmark-app:
+        description: 'Type of application: malt, route, k8s'
+        required: true
+        default: 'malt'
+        type: string
 
 jobs:
   run:
@@ -22,11 +31,26 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Start KinD cluster (for k8s app)
+        if: ${{ inputs.benchmark-app == 'k8s' }}
+        uses: helm/kind-action@v1
+        with:
+          config: ./kind_config.yaml
+
+      - name: Create kubeconfig for KinD (for k8s app).
+        if: ${{ inputs.benchmark-app == 'k8s' }}
+        run: |
+          mkdir -p ./kubeconfig
+          cp "$HOME/.kube/config" "./kubeconfig/config"
+          chmod +r ./kubeconfig/config
+          # Modify the kubeconfig to use host.docker.internal
+          sed -i 's/0.0.0.0/host.docker.internal/g' ./kubeconfig/config
+
       - name: Install dependencies
         run: pip install tomli tomli-w pyyaml requests
 
       - name: Generate docker-compose.yml
-        run: python generate_compose.py --scenario scenario.toml
+        run: python generate_compose.py --scenario ${{ inputs.scenario-file }} --app ${{ inputs.benchmark-app }}
 
       - name: Pull images
         run: |
@@ -69,7 +93,10 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Run assessment
-        run: docker compose up --timestamps --no-color --exit-code-from agentbeats-client --abort-on-container-exit
+        run: |
+          mkdir -p output
+          chmod 777 output
+          docker compose up --timestamps --no-color --exit-code-from agentbeats-client --abort-on-container-exit
 
       - name: Record provenance
         run: python record_provenance.py --compose docker-compose.yml --output output/provenance.json

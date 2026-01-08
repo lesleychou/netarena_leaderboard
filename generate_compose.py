@@ -62,6 +62,7 @@ services:
     image: {green_image}
     platform: linux/amd64
     container_name: green-agent
+    privileged: {privileged}  # Needed for route-agent (to run Mininet).
     command: ["--host", "0.0.0.0", "--port", "{green_port}", "--card-url", "http://green-agent:{green_port}"]
     environment:{green_env}
     healthcheck:
@@ -73,6 +74,7 @@ services:
     depends_on:{green_depends}
     networks:
       - agent-network
+    {k8s_service_options}
 
 {participant_services}
   agentbeats-client:
@@ -175,11 +177,18 @@ def format_depends_on(services: list) -> str:
     return "\n" + "\n".join(lines)
 
 
-def generate_docker_compose(scenario: dict[str, Any]) -> str:
+def generate_docker_compose(scenario: dict[str, Any], app: str) -> str:
     green = scenario["green_agent"]
     participants = scenario.get("participants", [])
 
     participant_names = [p["name"] for p in participants]
+
+    # Expose kubeconfig and localhost for k8s app to allow communication with kind cluster
+    k8s_service_options = """extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./kubeconfig:/root/.kube/:ro
+"""
 
     participant_services = "\n".join([
         PARTICIPANT_TEMPLATE.format(
@@ -192,14 +201,21 @@ def generate_docker_compose(scenario: dict[str, Any]) -> str:
     ])
 
     all_services = ["green-agent"] + participant_names
+    green_env = green.get("env", {})
+
+    if app == "k8s":
+        # For k8s app, set KUBECONFIG env var for green agent
+        green_env["KUBECONFIG"] = "/root/.kube/config"
 
     return COMPOSE_TEMPLATE.format(
         green_image=green["image"],
         green_port=DEFAULT_PORT,
-        green_env=format_env_vars(green.get("env", {})),
+        green_env=format_env_vars(green_env),
         green_depends=format_depends_on(participant_names),
         participant_services=participant_services,
-        client_depends=format_depends_on(all_services)
+        client_depends=format_depends_on(all_services),
+        privileged=str(app == "route").lower(),
+        k8s_service_options=k8s_service_options if app == "k8s" else ""
     )
 
 
@@ -259,6 +275,7 @@ def generate_env_file(scenario: dict[str, Any]) -> str:
 def main():
     parser = argparse.ArgumentParser(description="Generate Docker Compose from scenario.toml")
     parser.add_argument("--scenario", type=Path)
+    parser.add_argument("--app", type=str, choices=["malt", "route", "k8s"], default="malt", help="What app to generate for.")
     args = parser.parse_args()
 
     if not args.scenario.exists():
@@ -268,7 +285,7 @@ def main():
     scenario = parse_scenario(args.scenario)
 
     with open(COMPOSE_PATH, "w") as f:
-        f.write(generate_docker_compose(scenario))
+        f.write(generate_docker_compose(scenario, args.app))
 
     with open(A2A_SCENARIO_PATH, "w") as f:
         f.write(generate_a2a_scenario(scenario))

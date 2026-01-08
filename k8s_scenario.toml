@@ -1,0 +1,17 @@
+[green_agent]
+agentbeats_id = ""
+env = { LOG_LEVEL = "INFO" }
+
+[[participants]]
+agentbeats_id = ""
+name = "k8s_operator"
+env = {}
+
+[config]
+prompt_type = "zeroshot_base"
+num_queries = 1
+benchmark_path = "assessment_error_config.json"
+output_dir = "dump"
+microservice_dir = "/microservices-demo"
+max_iterations = 10
+regenerate_config = true

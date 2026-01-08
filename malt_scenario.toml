@@ -1,0 +1,17 @@
+[green_agent]
+agentbeats_id = ""
+env = { LOG_LEVEL = "INFO" }
+
+[[participants]]
+agentbeats_id = ""
+name = "malt_operator"
+env = {}
+
+[config]
+prompt_type = "zeroshot_base" 
+num_queries = 1 
+complexity_level = ["level1", "level2"]
+output_dir = "dump" 
+output_file = "query_output.jsonl" 
+benchmark_path = "assessment_queries.jsonl" 
+regenerate_query = true
