@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Run assessment
-        uses: .github/workflows/run-scenario.yml
+        uses: ./.github/workflows/run-scenario.yml
         with:
           scenario-file: 'k8s_scenario.toml'
           benchmark-app: 'k8s'
