@@ -112,7 +112,7 @@ jobs:
 
       - name: Copy files to submission directory
         run: |
-          cp scenario.toml submissions/${{ steps.metadata.outputs.unique_name }}.toml
+          cp ${{ inputs.scenario-file }} submissions/${{ steps.metadata.outputs.unique_name }}.toml
           cp output/results.json results/${{ steps.metadata.outputs.unique_name }}.json
           cp output/provenance.json submissions/${{ steps.metadata.outputs.unique_name }}.provenance.json
 
