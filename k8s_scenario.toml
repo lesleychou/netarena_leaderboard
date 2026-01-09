@@ -1,17 +1,24 @@
 [green_agent]
-agentbeats_id = ""
+agentbeats_id = "019ba4cb-2f71-7583-a69b-07e1c4329428"
 env = { LOG_LEVEL = "INFO" }
 
 [[participants]]
 agentbeats_id = ""
 name = "k8s_operator"
-env = {}
+env = { SECRET = "${GITHUB_SECRET_NAME}" }
 
 [config]
+# Prompt strategy for the agent. Options: "zeroshot_base", "zeroshot_cot", "fewshot_base", "fewshot_cot"
 prompt_type = "zeroshot_base"
+
+# Number of queries to generate for each error type (15 error types total)
 num_queries = 1
+
+# Maximum number of iterations the agent can take to resolve a given K8s network policy issue.
+max_iterations = 10
+
+# DO NOT MODIFY BELOW THIS LINE.
 benchmark_path = "assessment_error_config.json"
 output_dir = "dump"
 microservice_dir = "/microservices-demo"
-max_iterations = 10
 regenerate_config = true

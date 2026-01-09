@@ -1,16 +1,23 @@
 [green_agent]
-agentbeats_id = ""
+agentbeats_id = "019ba416-0462-7cf2-86f0-bf85123df8a4"
 env = { LOG_LEVEL = "INFO" }
 
 [[participants]]
 agentbeats_id = ""
 name = "malt_operator"
-env = {}
+env = { SECRET = "${GITHUB_SECRET_NAME}" }
 
 [config]
+# Prompt strategy for the agent. Options: "zeroshot_base", "zeroshot_cot", "fewshot_base", "fewshot_cot"
 prompt_type = "zeroshot_base" 
-num_queries = 1 
+
+# Levels of complexity to generate queries for. Available options: "level1", "level2", "level3".
 complexity_level = ["level1", "level2"]
+
+# Number of queries to generate for each level of complexity (4 for level1, 3 for level2 and level3).
+num_queries = 1 
+
+# DO NOT MODIFY BELOW THIS LINE.
 output_dir = "dump" 
 output_file = "query_output.jsonl" 
 benchmark_path = "assessment_queries.jsonl" 
