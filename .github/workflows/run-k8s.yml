@@ -7,15 +7,13 @@ on:
 
 jobs:
   run-k8s:
-    runs-on: ubuntu-latest
     if: github.event.repository.fork == true || github.ref != 'refs/heads/main'
     permissions:
       contents: write
       packages: read
-
-    steps:
-      - name: Run assessment
-        uses: ./.github/workflows/run-scenario.yml
-        with:
-          scenario-file: 'k8s_scenario.toml'
-          benchmark-app: 'k8s'
+    
+    uses: ./.github/workflows/run-scenario.yml
+    secrets: inherit
+    with:
+      scenario-file: 'k8s_scenario.toml'
+      benchmark-app: 'k8s'

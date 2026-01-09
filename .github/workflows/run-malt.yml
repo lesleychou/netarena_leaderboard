@@ -7,15 +7,13 @@ on:
 
 jobs:
   run-malt:
-    runs-on: ubuntu-latest
     if: github.event.repository.fork == true || github.ref != 'refs/heads/main'
     permissions:
       contents: write
       packages: read
 
-    steps:
-      - name: Run assessment
-        uses: ./.github/workflows/run-scenario.yml
-        with:
-          scenario-file: 'malt_scenario.toml'
-          benchmark-app: 'malt'
+    uses: ./.github/workflows/run-scenario.yml
+    secrets: inherit
+    with:
+      scenario-file: 'malt_scenario.toml'
+      benchmark-app: 'malt'
