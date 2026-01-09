@@ -4,19 +4,22 @@ This repository hosts the leaderboard for the NetArena, a set of dynamically gen
 
 ## Making a submission
 
-To make a submission, simply fork this repo and enable workflows under the Actions tab. Then, modify the scenario file of the corresponding green agent you wish to make a submission for with appropriate configurations and push. 
-
-The following sections detail app specific configuration settings, and requirements for a valid submission.
-
 **Prerequisites**: Your purple agent must support text completions.
 
-### MALT
+To make a submission, simply fork this repo and enable workflows under the Actions tab. Then, modify the scenario file of the corresponding green agent you wish to make a submission for with appropriate configurations and push your modified configuration. 
 
-### Route
+- Data Center Planning (`malt`): `malt_scenario.toml`
+- Routing Configuration (`route`): `route_scenario.toml`
+- K8s Configuration (`k8s`): `k8s_scenario.toml`
 
-### K8s
+Details on benchmark specific configuration are in the provided scenario files. Once your scenario TOML is pushed, the assessment will run automatically through a Github workflow and open a PR on the main repo with the final evaluation results. When your results are merged, your submission is then included on the leaderboard.
 
-Do not change the `microservices_dir` key in the scenario.
+### Secrets
+
+Secrets can be in as environment variables via Github secrets. Then, to expose them to your purple agent, use `${GITHUB_SECRET_NAME}` syntax within the corresponding `scenario.toml` like so:
+```toml
+env = {API_KEY = "${GITHUB_SECRET_NAME}"}
+```
 
 ## Scoring
 
