@@ -1,0 +1,21 @@
+[green_agent]
+agentbeats_id = "019ba416-0462-7cf2-86f0-bf85123df8a4"
+env = { LOG_LEVEL = "INFO" }
+
+[[participants]]
+agentbeats_id = "019ba44f-9d1f-7ff3-8fbe-35c4ecfa40b2"
+name = "malt_operator"
+[participants.env]
+    AZURE_API_KEY = "${AZURE_API_KEY}"
+    AZURE_API_BASE = "${AZURE_API_BASE}"
+    AZURE_API_VERSION = "2024-12-01-preview"
+    MODEL_NAME = "azure/gpt-4.1"
+
+[config]
+prompt_type = "zeroshot_base" 
+num_queries = 1 
+complexity_level = ["level1"]
+output_dir = "dump" 
+output_file = "query_output.jsonl" 
+benchmark_path = "assessment_queries.jsonl" 
+regenerate_query = true
