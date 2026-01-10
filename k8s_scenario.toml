@@ -1,6 +1,6 @@
 [green_agent]
 agentbeats_id = "019ba4cb-2f71-7583-a69b-07e1c4329428"
-env = { LOG_LEVEL = "INFO" }
+env = { LOG_LEVEL = "INFO" } # to trigger test again
 
 [[participants]]
 agentbeats_id = "019ba44f-9d1f-7ff3-8fbe-35c4ecfa40b2"
