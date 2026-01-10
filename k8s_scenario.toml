@@ -3,9 +3,9 @@ agentbeats_id = "019ba4cb-2f71-7583-a69b-07e1c4329428"
 env = { LOG_LEVEL = "INFO" }
 
 [[participants]]
-agentbeats_id = ""
+agentbeats_id = "019ba44f-9d1f-7ff3-8fbe-35c4ecfa40b2"
 name = "k8s_operator"
-env = { SECRET = "${GITHUB_SECRET_NAME}" }
+env = { AZURE_API_KEY = "${AZURE_API_KEY}", AZURE_API_BASE = "${AZURE_API_BASE}", AZURE_API_VERSION = "${AZURE_API_VERSION}", MODEL_NAME = "${MODEL_NAME}" }
 
 [config]
 # Prompt strategy for the agent. Options: "zeroshot_base", "zeroshot_cot", "fewshot_base", "fewshot_cot"
