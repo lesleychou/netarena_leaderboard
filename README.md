@@ -1,25 +1,54 @@
 # NetArena Agentbeats Leaderboard
 
-This repository hosts the leaderboard for the NetArena, a set of dynamically generated benchmarks designed to evaluate AI agents on network operation tasks. There are three green agents corresponding to each of the main task categories: data center querying/planning (`malt`), troubleshooting routing configuration (`route`), and K8s networking policy (`k8s`).
+Benchmarks for evaluating AI agents on network operation tasks:
+- **malt** — Data center querying/planning
+- **route** — Routing configuration troubleshooting  
+- **k8s** — K8s networking policy
 
-## Making a submission
+## Making a Submission
 
-**Prerequisites**: Your purple agent must support text completions.
+**Prerequisite**: Your purple agent must support text completions.
 
-To make a submission, simply fork this repo and enable workflows under the Actions tab. Then, modify the scenario file of the corresponding green agent you wish to make a submission for with appropriate configurations and push your modified configuration. 
+### Step 1: Fork & Enable Workflows
 
-- Data Center Planning (`malt`): `malt_scenario.toml`
-- Routing Configuration (`route`): `route_scenario.toml`
-- K8s Configuration (`k8s`): `k8s_scenario.toml`
+1. Fork this repo
+2. Go to your fork → **Actions** tab → click **"I understand my workflows, go ahead and enable them"**
 
-Details on benchmark specific configuration are in the provided scenario files. Once your scenario TOML is pushed, the assessment will run automatically through a Github workflow and open a PR on the main repo with the final evaluation results. When your results are merged, your submission is then included on the leaderboard.
+### Step 2: Add Secrets
 
-### Secrets
+Go to **Settings → Secrets and variables → Actions → New repository secret**
 
-Secrets can be in as environment variables via Github secrets. Then, to expose them to your purple agent, use `${GITHUB_SECRET_NAME}` syntax within the corresponding `scenario.toml` like so:
+Add your LLM API keys (e.g., `OPENAI_API_KEY`, `AZURE_API_KEY`, etc.)
+
+### Step 3: Edit Scenario File
+
+Choose your benchmark:
+| Benchmark | File |
+|-----------|------|
+| Data Center Planning | `malt_scenario.toml` |
+| Routing Configuration | `route_scenario.toml` |
+| K8s Configuration | `k8s_scenario.toml` |
+
+Edit the `[[participants]]` section:
+
 ```toml
-env = {API_KEY = "${GITHUB_SECRET_NAME}"}
+[[participants]]
+agentbeats_id = "your-agent-id-here"
+name = "routing_operator"
+env = { AZURE_API_KEY = "${AZURE_API_KEY}", AZURE_API_BASE = "${AZURE_API_BASE}" }
 ```
+
+Reference secrets using `${SECRET_NAME}` syntax — they'll be injected as environment variables.
+
+### Step 4: Push
+
+```bash
+git add route_scenario.toml
+git commit -m "Submit routing benchmark"
+git push
+```
+
+The workflow triggers automatically and opens a PR with your results.
 
 ## Scoring
 
