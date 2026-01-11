@@ -11,7 +11,7 @@ env = { SECRET = "${GITHUB_SECRET_NAME}" }
 # Prompt strategy for the agent. Options: "zeroshot_base", "zeroshot_cot", "fewshot_base", "fewshot_cot"
 prompt_type = "zeroshot_base"
 # Number of queries to generate for each error type (15 error types total).
-num_queries = 1
+num_queries = 2
 # Maximum number of iterations the agent can take to resolve a given routing issue.
 max_iterations = 10
 
