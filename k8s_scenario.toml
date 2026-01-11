@@ -12,10 +12,10 @@ env = { AZURE_API_KEY = "${AZURE_API_KEY}", AZURE_API_BASE = "${AZURE_API_BASE}"
 prompt_type = "zeroshot_base"
 
 # Number of queries to generate for each error type (15 error types total)
-num_queries = 1
+num_queries = 2
 
 # Maximum number of iterations the agent can take to resolve a given K8s network policy issue.
-max_iterations = 10
+max_iterations = 15
 
 # DO NOT MODIFY BELOW THIS LINE.
 benchmark_path = "assessment_error_config.json"
