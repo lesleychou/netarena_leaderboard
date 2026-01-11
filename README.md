@@ -34,7 +34,7 @@ Edit the `[[participants]]` section:
 ```toml
 [[participants]]
 agentbeats_id = "your-agent-id-here"
-name = "routing_operator"
+name = "route_operator"
 env = { AZURE_API_KEY = "${AZURE_API_KEY}", AZURE_API_BASE = "${AZURE_API_BASE}" }
 ```
 
