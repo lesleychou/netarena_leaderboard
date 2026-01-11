@@ -74,7 +74,7 @@ services:
     depends_on:{green_depends}
     networks:
       - agent-network
-    {k8s_service_options}
+    {extra_options}
 
 {participant_services}
   agentbeats-client:
@@ -184,11 +184,17 @@ def generate_docker_compose(scenario: dict[str, Any], app: str) -> str:
     participant_names = [p["name"] for p in participants]
 
     # Expose kubeconfig and localhost for k8s app to allow communication with kind cluster
-    k8s_service_options = """extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
+    extra_options = ""
+    if app == "k8s":
+        extra_options = """volumes:
       - ./kubeconfig:/root/.kube/:ro
-"""
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+        """
+    elif app == "route":
+        extra_options = """volumes:
+      - /lib/modules:/lib/modules
+    """
 
     participant_services = "\n".join([
         PARTICIPANT_TEMPLATE.format(
@@ -215,7 +221,7 @@ def generate_docker_compose(scenario: dict[str, Any], app: str) -> str:
         participant_services=participant_services,
         client_depends=format_depends_on(all_services),
         privileged=str(app == "route").lower(),
-        k8s_service_options=k8s_service_options if app == "k8s" else ""
+        extra_options=extra_options
     )
 
 
