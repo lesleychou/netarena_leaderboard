@@ -1,0 +1,27 @@
+[green_agent]
+agentbeats_id = "019ba8d8-c1d1-7923-b6c7-c5020e1c6cbe"
+env = { LOG_LEVEL = "INFO" }
+
+[[participants]]
+agentbeats_id = "019ba44f-9d1f-7ff3-8fbe-35c4ecfa40b2"
+name = "route_operator"
+[participants.env]
+    AZURE_API_KEY = "${AZURE_API_KEY}"
+    AZURE_API_BASE = "${AZURE_API_BASE}"
+    AZURE_API_VERSION = "2024-12-01-preview"
+    MODEL_NAME = "azure/gpt-4.1"
+
+[config]
+# Prompt strategy for the agent. Options: "zeroshot_base", "zeroshot_cot", "fewshot_base", "fewshot_cot"
+prompt_type = "zeroshot_base"
+# Number of queries to generate for each error type (15 error types total).
+num_queries = 1
+# Maximum number of iterations the agent can take to resolve a given routing issue.
+max_iterations = 10
+
+# DO NOT MODIFY BELOW THIS LINE.
+benchmark_path = "assessment_error_config.json"
+regenerate_benchmark = true
+output_dir = "dump"
+num_switches = 2
+num_hosts_per_subnet = 1
